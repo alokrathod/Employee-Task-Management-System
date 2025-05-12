@@ -8,7 +8,7 @@ const App = () => {
 
   const [user, setUser] = useState(null);
   const [loggedInUserData, setLoggedInUserData] = useState(null);
-  const authData = useContext(AuthContext)
+  const [userData, setUserData] = useContext(AuthContext)
 
 
   // Restore session from localStorage on app load
@@ -22,9 +22,9 @@ const App = () => {
   }, []);
 
   const handleLogin = (email, password) => {
-    if(authData) {
-      const employee = authData.employees.find((e)=>email == e.email && e.password == password);
-      const admin = authData.admin.find((e)=>email == e.email && e.password == password)
+    if(userData) {
+      const employee = userData.employees.find((e)=>email == e.email && e.password == password);
+      const admin = userData.admin.find((e)=>email == e.email && e.password == password)
       if(admin) {
         setUser('admin')
         setLoggedInUserData(admin)
