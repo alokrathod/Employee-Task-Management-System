@@ -9,6 +9,19 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [loggedInUserData, setLoggedInUserData] = useState(null);
   const [userData, setUserData] = useContext(AuthContext)
+  // const [loading, setLoading] = useState(true);
+
+  // useEffect(() => {
+  //   const storedUser = localStorage.getItem("loggedInUser");
+  //   if(storedUser) {
+  //     const parsed = JSON.parse(storedUser);
+  //     setUser(parsed.role);
+  //     setLoggedInUserData(parsed.data);
+  //   }
+  //   setLoading(false);
+  // }, []);
+
+  // if(loading) return <div className='loading'>Loading..</div>
 
 
   // Restore session from localStorage on app load

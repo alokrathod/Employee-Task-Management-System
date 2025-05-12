@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { use, useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthProvider';
 
 const CreateTask = () => {
@@ -16,19 +16,32 @@ const CreateTask = () => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    setNewTask({title, description, date, category, active: false, newTask: true, completed: false, failed: false})
+    const newTask = {
+      title,
+      description,
+      date,
+      category,
+      active: false,
+      newTask: true,
+      completed: false,
+      failed: false
+    };
 
-    const data = userData.employees;
-    console.log(data)
 
-    data.forEach((elem) => {
-      if(assignTo == elem.name) {
-        elem.tasks.push(newTask)
-        elem.taskCounts.newTask = elem.taskCounts.newTask + 1
+    const updatedEmployees = userData.employees.map(employee =>
+      employee.name === assignTo ? {
+        ...employee,
+        tasks: [...employee.tasks, newTask],
+        taskCounts: {
+          ...employee.taskCounts,
+          newTask: employee.taskCounts.newTask + 1
+        }
       }
-    })
+      : employee
+    )
 
-    // setUserData(data)
+    setUserData({...userData, employees: updatedEmployees});
+    localStorage.setItem('employees', JSON.stringify(updatedEmployees));
 
     setTitle("");
     setDate("");
@@ -73,13 +86,35 @@ const CreateTask = () => {
             <label className="block text-sm font-medium text-gray-300 mb-1">
               Assign To
             </label>
-            <input
-              type="text"
-              placeholder="Employee name"
+            {/* <select
               value={assignTo}
               onChange={(e) => setAssignTo(e.target.value)}
-              className="w-full px-4 py-2 rounded-md border border-gray-600 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+              required
+              className='w-full px-4 py-2 rounded-md border border-gray-600 bg-transparent text-white focus:outline-none focus: ring-2 focus:ring-blue-500'
+              >
+              <option value="" disabled>Select employee</option>
+              {userData?.employee?.map((emp) => {
+                <option key={emp.id} value={emp.name}>
+                  {emp.name}
+                </option>
+              })}
+            </select> */}
+            {userData && userData.employees && userData.employees.length > 0 && (
+              <select
+                value={assignTo}
+                onChange={(e) => setAssignTo(e.target.value)}
+                required
+                className="w-full px-4 py-2 rounded-md border border-gray-600 bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option className='bg-gray-800 text-white' value="" disabled>Select employee</option>
+                {userData.employees.map((emp) => (
+                  <option className='bg-gray-800 text-white' key={emp.id} value={emp.name}>
+                    {emp.name}
+                  </option>
+                ))}
+              </select>
+            )}
+
           </div>
           {/* Category */}
           <div>
