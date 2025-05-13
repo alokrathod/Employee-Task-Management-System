@@ -1,11 +1,18 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Header = (props) => {
 
+  const navigate = useNavigate();
+
   const logOutUser = () => {
-    localStorage.setItem("loggedInUser", "");
-    // window.location.reload();
-    props.changeUser('')
+    if(typeof props.changeUser === 'function') {
+      props.changeUser('');
+    }
+    else {
+      localStorage.setItem("loggedInUser", "");
+      navigate('/')
+    }
   }
 
   return (
